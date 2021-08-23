@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class SpringSimpleTest {
+class ReporterGeneratorTest {
 
     @Test
     fun test1() {
@@ -29,7 +29,7 @@ class SpringSimpleTest {
 
         val result = KotlinCompilation().apply {
             sources = listOf(source)
-            annotationProcessors = listOf(SpringReporterGenerator())
+            annotationProcessors = listOf(ReporterGenerator())
             inheritClassPath = true
             verbose = false
         }.compile()

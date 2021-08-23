@@ -9,16 +9,39 @@ with meaningful names.
 
 ## How to use
 
-Just include the dependencies in maven or gradle
+Just include the dependencies in maven or gradle.
+
+### Configuration
+
+#### Gradle java project
 
 ```kotlin
 dependencies {
     compileOnly(project(":reporter-api"))
-    annotationProcessor(project(":reporter-spring"))
+    annotationProcessor(project(":reporter-generator"))
 }
 ```
 
-And then annotate your interface as `@Reporter`. You can use underline characters to mark where put the
+#### Gradle kotlin project
+
+```kotlin
+plugins {
+    kotlin("kapt")
+}
+
+dependencies {
+    compileOnly(project(":reporter-api"))
+    kapt(project(":reporter-generator"))
+}
+```
+
+#### Maven java project
+
+...
+
+### Reporter interface
+
+Then annotate your interface as `@Reporter`. You can use underline characters to mark where put the
 arguments.
 
 ```java
@@ -69,6 +92,8 @@ public class YourReporterImpl implements YourReporter {
 }
 ```
 
+### Use
+
 So, you can use the interface:
 
 ```java
@@ -92,6 +117,5 @@ public class YourUseCase {
 ## TODO
 
 - [ ] What would be the correct package for the implementation?
-- [ ] Ktor implementation
-- [ ] Quarkus implementation
-- [ ] Micronaut implementation
+- [ ] Complete tests
+- [ ] Better documentation

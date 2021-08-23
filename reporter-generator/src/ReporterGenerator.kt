@@ -12,8 +12,8 @@ import javax.lang.model.util.ElementFilter
 
 @AutoService(Processor::class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedOptions(SpringReporterGenerator.KAPT_KOTLIN_GENERATED_OPTION_NAME)
-class SpringReporterGenerator : AbstractProcessor() {
+@SupportedOptions(ReporterGenerator.KAPT_KOTLIN_GENERATED_OPTION_NAME)
+class ReporterGenerator : AbstractProcessor() {
 
     companion object {
         const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
@@ -43,14 +43,12 @@ class SpringReporterGenerator : AbstractProcessor() {
             out.append("package $packageOfType;\n\n")
             out.append("import org.slf4j.LoggerFactory;\n")
             out.append("import org.slf4j.Logger;\n")
-            out.append("import org.springframework.stereotype.Component;\n\n")
 
             if (useMeter) {
                 out.append("import io.micrometer.core.instrument.MeterRegistry;\n\n")
                 out.append("import io.micrometer.core.instrument.Tag;\n\n")
             }
 
-            out.append("@Component\n")
             out.append("public class ${element.simpleName}Impl implements ${element.simpleName} {\n\n")
             out.append("\tprivate static final Logger log = LoggerFactory.getLogger(${element.simpleName}Impl.class);\n\n")
 

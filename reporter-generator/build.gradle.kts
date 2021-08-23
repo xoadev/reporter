@@ -1,26 +1,35 @@
 plugins {
-    java
+    kotlin("jvm")
+    kotlin("kapt")
     `maven-publish`
 }
 
-group = "dev.xoa.reporter"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
+dependencies {
+    implementation(kotlin("stdlib"))
+    implementation("com.google.auto.service:auto-service:1.0-rc4")
+    implementation("org.springframework:spring-context:5.3.9")
+    implementation("io.micrometer:micrometer-core:1.7.3")
+    kapt("com.google.auto.service:auto-service:1.0-rc4")
+    implementation(project(":reporter-api"))
+    testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.4.2")
+    testImplementation(kotlin("test"))
 }
 
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+kotlin.sourceSets["main"].kotlin.srcDirs("src")
+kotlin.sourceSets["test"].kotlin.srcDirs("test")
+sourceSets["main"].resources.srcDirs("resources")
+sourceSets["test"].resources.srcDirs("testresources")
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
             pom {
-                name.set("reporter-api")
-                description.set("reporter-api $version")
+                name.set("reporter-generator")
+                description.set("reporter-generator $version")
                 url.set("https://github.com/xoadev/reporter")
                 licenses {
                     license {

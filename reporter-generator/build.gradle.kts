@@ -5,6 +5,15 @@ plugins {
     kotlin("kapt")
     `maven-publish`
     signing
+    id("org.jetbrains.dokka")
+}
+
+val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
+
+val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+    dependsOn(dokkaHtml)
+    archiveClassifier.set("javadoc")
+    from(dokkaHtml.outputDirectory)
 }
 
 // Stub secrets to let the project sync and build without the publication values set up
@@ -54,6 +63,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
 
 publishing {
 
@@ -70,7 +83,7 @@ publishing {
 
     publications {
         create<MavenPublication>("maven") {
-            from(components["java"])
+            artifact(javadocJar)
             pom {
                 name.set("reporter-generator")
                 description.set("Library to build a reporter implementation that reports logs and metrics")

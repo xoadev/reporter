@@ -61,20 +61,30 @@ class ReporterGenerator : AbstractProcessor() {
             }
 
             commands.forEach { commandAndMethod ->
-                out.generateMethod(commandAndMethod.first, commandAndMethod.second)
+                if (commandAndMethod.first != null) {
+                    out.generateMethod(commandAndMethod.first!!, commandAndMethod.second)
+                }
             }
 
             out.append("}\n")
         }
     }
 
-    private fun List<Element>.toCommand() : List<Pair<ReporterCommand, ExecutableElement>> {
+    private fun List<Element>.toCommand() : List<Pair<ReporterCommand?, ExecutableElement>> {
         return ElementFilter.methodsIn(this)
             .map { method ->
-                Pair(ReporterCommand.parse(
-                    method.simpleName.toString(),
-                    method.parameters.map { it.simpleName.toString() }
-                ), method)
+                try {
+                    Pair(ReporterCommand.parse(
+                        method.simpleName.toString(),
+                        method.parameters.map { it.simpleName.toString() }
+                    ), method)
+                } catch (parsingException: Throwable) {
+                    processingEnv.messager.errorMessage {
+                        "Invalid sentence: ${parsingException.message} in method $method"
+                    }
+
+                    Pair(null, method)
+                }
             }
     }
 
@@ -116,7 +126,6 @@ class ReporterGenerator : AbstractProcessor() {
                         append("\t\tthis.meterRegistry.gauge(code, tags, ${command.amount.toCode()});\n")
                 }
             }
-            else -> TODO()
         }
 
         append("\t}\n\n")

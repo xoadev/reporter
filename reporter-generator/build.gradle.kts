@@ -1,13 +1,43 @@
+import java.util.Properties
+
 plugins {
     kotlin("jvm")
     kotlin("kapt")
     `maven-publish`
+    signing
 }
+
+// Stub secrets to let the project sync and build without the publication values set up
+ext["signing.keyId"] = null
+ext["signing.password"] = null
+ext["signing.secretKeyRingFile"] = null
+ext["ossrhUsername"] = null
+ext["ossrhPassword"] = null
+
+// Grabbing secrets from local.properties file or from environment variables, which could be used on CI
+val secretPropsFile = project.rootProject.file("local.properties")
+
+if (secretPropsFile.exists()) {
+    secretPropsFile.reader().use {
+        Properties().apply {
+            load(it)
+        }
+    }.onEach { (name, value) ->
+        ext[name.toString()] = value
+    }
+} else {
+    ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
+    ext["signing.password"] = System.getenv("SIGNING_PASSWORD")
+    ext["signing.secretKeyRingFile"] = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
+    ext["ossrhUsername"] = System.getenv("OSSRH_USERNAME")
+    ext["ossrhPassword"] = System.getenv("OSSRH_PASSWORD")
+}
+
+fun getExtraString(name: String) = ext[name]?.toString()
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.google.auto.service:auto-service:1.0-rc4")
-    implementation("org.springframework:spring-context:5.3.9")
+    compileOnly("com.google.auto.service:auto-service:1.0-rc4")
     implementation("io.micrometer:micrometer-core:1.7.3")
     kapt("com.google.auto.service:auto-service:1.0-rc4")
     implementation(project(":reporter-api"))
@@ -24,12 +54,26 @@ tasks.test {
     useJUnitPlatform()
 }
 
+
 publishing {
+
+    repositories {
+        maven {
+            name = "sonatype"
+            setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = getExtraString("ossrhUsername")
+                password = getExtraString("ossrhPassword")
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("maven") {
+            from(components["java"])
             pom {
                 name.set("reporter-generator")
-                description.set("reporter-generator $version")
+                description.set("Library to build a reporter implementation that reports logs and metrics")
                 url.set("https://github.com/xoadev/reporter")
                 licenses {
                     license {
@@ -52,4 +96,8 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign(publishing.publications)
 }

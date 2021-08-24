@@ -17,8 +17,8 @@ Just include the dependencies in maven or gradle.
 
 ```kotlin
 dependencies {
-    compileOnly(project(":reporter-api"))
-    annotationProcessor(project(":reporter-generator"))
+    compileOnly("dev.xoa.reporter:reporter-api:1.0.1")
+    annotationProcessor("dev.xoa.reporter:reporter-generator:1.0.1")
 }
 ```
 
@@ -30,14 +30,23 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":reporter-api"))
-    kapt(project(":reporter-generator"))
+    compileOnly("dev.xoa.reporter:reporter-api:1.0.1")
+    kapt("dev.xoa.reporter:reporter-generator:1.0.1")
 }
 ```
 
 #### Maven java project
 
-...
+```xml
+<dependences>
+    <dependency>
+      <groupId>dev.xoa.reporter</groupId>
+      <artifactId>reporter-generator</artifactId>
+      <version>1.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+</dependences>
+```
 
 ### Reporter interface
 

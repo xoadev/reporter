@@ -42,7 +42,7 @@ dependencies {
     <dependency>
       <groupId>dev.xoa.reporter</groupId>
       <artifactId>reporter-generator</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
       <scope>provided</scope>
     </dependency>
 </dependences>
@@ -68,7 +68,6 @@ public interface YourReporter {
 At compiling time the following implementation will be generated:
 
 ```java
-
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -87,6 +86,7 @@ public class YourReporterImpl implements YourReporter {
 	public ApiReporterImpl(MeterRegistry meterRegistry) {
 		this.meterRegistry = meterRegistry;
 	}
+	
 	@Override
 	public void infoHello_Requested(java.lang.String name) {
 		log.info("hello {} requested", name);

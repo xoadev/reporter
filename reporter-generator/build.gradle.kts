@@ -1,5 +1,9 @@
 import java.util.Properties
 
+val autoservice_version: String by project
+val micrometer_version: String by project
+val kotlin_compile_testing_version: String by project
+
 plugins {
     kotlin("jvm")
     kotlin("kapt")
@@ -46,11 +50,11 @@ fun getExtraString(name: String) = ext[name]?.toString()
 
 dependencies {
     implementation(kotlin("stdlib"))
-    compileOnly("com.google.auto.service:auto-service:1.0-rc4")
-    implementation("io.micrometer:micrometer-core:1.7.3")
-    kapt("com.google.auto.service:auto-service:1.0-rc4")
+    compileOnly("com.google.auto.service:auto-service:$autoservice_version")
+    implementation("io.micrometer:micrometer-core:$micrometer_version")
+    kapt("com.google.auto.service:auto-service:$autoservice_version")
     implementation(project(":reporter-api"))
-    testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.4.2")
+    testImplementation("com.github.tschuchortdev:kotlin-compile-testing:$kotlin_compile_testing_version")
     testImplementation(kotlin("test"))
 }
 

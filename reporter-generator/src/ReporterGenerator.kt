@@ -11,7 +11,7 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.util.ElementFilter
 
 @AutoService(Processor::class)
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedOptions(ReporterGenerator.KAPT_KOTLIN_GENERATED_OPTION_NAME)
 class ReporterGenerator : AbstractProcessor() {
 

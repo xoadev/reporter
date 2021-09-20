@@ -44,8 +44,8 @@ if (secretPropsFile.exists()) {
 fun getExtraString(name: String) = ext[name]?.toString()
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
 }
 
 java {
@@ -68,7 +68,7 @@ publishing {
 
     publications {
         create<MavenPublication>("maven") {
-            artifact(javadocJar)
+            from(components["java"])
 
             pom {
                 name.set("reporter-api")

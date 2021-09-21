@@ -87,7 +87,8 @@ publishing {
 
     publications {
         create<MavenPublication>("maven") {
-            artifact(javadocJar)
+            from(components["java"])
+
             pom {
                 name.set("reporter-generator")
                 description.set("Library to build a reporter implementation that reports logs and metrics")

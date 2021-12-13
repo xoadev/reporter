@@ -13,6 +13,9 @@ class ReporterGeneratorTest {
         val source = SourceFile.kotlin("TestReporter.kt", """
             |package dev.xoa.reporter
             |
+            |data class Value(val value: String)
+            |
+            |
             |@Reporter
             |interface TestReporter {
             |
@@ -23,6 +26,8 @@ class ReporterGeneratorTest {
             |    fun warnLabel_MustStartWithUppercase(label: String)
             |
             |    fun debug_StockUpdatedTo_AndIncrementStockUpdated(product: String, newStock: Int)
+            |    
+            |    fun debug_StockUpdatedTo_AndIncrementStockUpdated(product: String, value: Value)
             |}
     """.trimMargin()
         )

@@ -128,3 +128,6 @@ public class YourUseCase {
 - [ ] What would be the correct package for the implementation?
 - [ ] Complete tests
 - [ ] Better documentation
+- [ ] Log error with exception should not require underscore
+- [ ] Fails when values are not simple
+- [ ] Log type must be the interface, not impl
